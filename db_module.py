@@ -60,7 +60,7 @@ class MongoDBModule:
             print("Error while fetching records, Try again")
             return {"Error": "Couldn't fetch records, please try later"}, 400
 
-    def line_graph_data(self):
+    def get_line_graph_data(self):
         try:
             response = self.collection.aggregate(query.line_graph)
             output = []
@@ -72,12 +72,28 @@ class MongoDBModule:
             print("Error while fetching records, Try again")
             return {"Error": "Couldn't fetch records, please try later"}, 400
 
-    def bar_graph_data(self):
+    def get_bar_graph_data(self):
         try:
             response = self.collection.aggregate(query.bar_graph)
             output = []
             for record in response:
                 output.append(record)
+            return output, 200
+        except Exception as e:
+            print(e)
+            print("Error while fetching records, Try again")
+            return {"Error": "Couldn't fetch records, please try later"}, 400
+
+    def get_pie_chart_data(self):
+        try:
+            fatal_accidents = self.collection.aggregate(query.fatal_accidents)
+            output = {}
+            for record in fatal_accidents:
+                output.update(record)
+
+            nonfatal_accidents = self.collection.aggregate(query.non_fatal_accidents)
+            for record in nonfatal_accidents:
+                output.update(record)
             return output, 200
         except Exception as e:
             print(e)
@@ -94,5 +110,5 @@ if __name__ == "__main__":
     # print(obj.get_aircraft_destroyed())
     # print(obj.get_fatal_injuries())
     # print(obj.get_serious_injuries())
-    # print(obj.line_graph_data())
-    # print(obj.bar_graph_data())
+    # print(obj.get_line_graph_data())
+    # print(obj.get_bar_graph_data())

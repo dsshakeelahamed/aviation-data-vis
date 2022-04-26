@@ -38,7 +38,7 @@ serious_injuries = [
 
 line_graph = [
              {
-                "$match": {"Investigation.Type": "Accident" }
+                "$match": {"Investigation.Type": "Accident"}
              },
              {
                 "$group":
@@ -64,3 +64,18 @@ bar_graph = [
             },
             {"$project": {"PhaseOfFlight": "$_id.PhaseOfFlight", "TotalAccidents": 1, "_id": 0}},
             ]
+
+fatal_accidents = [
+    {"$match":
+         {"Injury.Severity": "Non-Fatal"}
+     },
+    {"$count": "fatal"}
+]
+
+non_fatal_accidents = [
+    {"$match":
+         {"Injury.Severity":
+              {"$not" : {"$eq" : "Non-Fatal"}}
+          }},
+    {"$count": "non_fatal"}
+]
