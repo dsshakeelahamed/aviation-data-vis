@@ -39,14 +39,21 @@ class AviationSeriousInjuries(Resource):
 
 class AviationLineGraph(Resource):
     def get(self):
-        data, status_code = db_module.line_graph_data()
+        data, status_code = db_module.get_line_graph_data()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
         return response
 
 
 class AviationBarGraph(Resource):
     def get(self):
-        data, status_code = db_module.bar_graph_data()
+        data, status_code = db_module.get_bar_graph_data()
+        response = Response(json.dumps(data), status_code, content_type="Application/Json")
+        return response
+
+
+class AviationPieChart(Resource):
+    def get(self):
+        data, status_code = db_module.get_pie_chart_data()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
         return response
 
@@ -57,6 +64,7 @@ api.add_resource(AviationFatalInjuries, "/aviation/fatal")
 api.add_resource(AviationSeriousInjuries, "/aviation/serious")
 api.add_resource(AviationLineGraph, "/aviation/line")
 api.add_resource(AviationBarGraph, "/aviation/bar")
+api.add_resource(AviationPieChart, "/aviation/pie")
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=8081)
