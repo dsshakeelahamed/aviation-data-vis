@@ -13,6 +13,7 @@ class AviationAccidents(Resource):
     def get(self):
         data, status_code = db_module.get_aviation_accidents()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
 
@@ -20,6 +21,7 @@ class AviationDestroyed(Resource):
     def get(self):
         data, status_code = db_module.get_aircraft_destroyed()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
 
@@ -27,6 +29,7 @@ class AviationFatalInjuries(Resource):
     def get(self):
         data, status_code = db_module.get_fatal_injuries()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
 
@@ -34,6 +37,7 @@ class AviationSeriousInjuries(Resource):
     def get(self):
         data, status_code = db_module.get_serious_injuries()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
 
@@ -41,6 +45,7 @@ class AviationLineGraph(Resource):
     def get(self):
         data, status_code = db_module.get_line_graph_data()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
 
@@ -48,6 +53,7 @@ class AviationBarGraph(Resource):
     def get(self):
         data, status_code = db_module.get_bar_graph_data()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
 
@@ -55,6 +61,7 @@ class AviationPieChart(Resource):
     def get(self):
         data, status_code = db_module.get_pie_chart_data()
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
 
