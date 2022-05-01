@@ -100,10 +100,17 @@ class MongoDBModule:
             print("Error while fetching records, Try again")
             return {"Error": "Couldn't fetch records, please try later"}, 400
 
-    def get_all_data(self):
+    def get_all_data(self, page_size, page_num):
         try:
+            page_size = int(page_size)
+            page_num = int(page_num)
+            if page_size <= 0:
+                page_size = 1
+            if page_num <= 0:
+                page_num = 10
+            record_start = (page_size * (page_num - 1))
             all_data = self.collection.find({}, {"_id": 0, "Event": 1, "Location" : 1, "Injury": 1, "Aircraft": 1, "Make": 1,
-                                                 "Total": 1, "Weather": 1, "Broad": 1, "FAR": 1})
+                                                 "Total": 1, "Weather": 1, "Broad": 1, "FAR": 1}).skip(record_start).limit(page_size)
             output = []
             for data in all_data:
                 record = {}
@@ -120,7 +127,7 @@ class MongoDBModule:
                 record['Description'] = data.get('FAR', {}).get('Description', 'NA')
                 output.append(record)
 
-            return output, 200
+            return {'data': output}, 200
         except Exception as e:
             print(e)
             print("Error while fetching records, Try again")
