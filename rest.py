@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 from flask_cors import CORS
 from flask_restful import Api, Resource
 from db_module import MongoDBModule
@@ -70,7 +70,7 @@ class AviationPieChart(Resource):
 class AviationAllData(Resource):
     def get(self):
         # get data and parse according to required fields
-        data, status_code = db_module.get_all_data()
+        data, status_code = db_module.get_all_data(request.args.get('page_size', 8), request.args.get('page_num', 1))
         response = Response(json.dumps(data), status_code, content_type="Application/Json")
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
