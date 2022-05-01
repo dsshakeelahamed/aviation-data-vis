@@ -100,6 +100,32 @@ class MongoDBModule:
             print("Error while fetching records, Try again")
             return {"Error": "Couldn't fetch records, please try later"}, 400
 
+    def get_all_data(self):
+        try:
+            all_data = self.collection.find({}, {"_id": 0, "Event": 1, "Location" : 1, "Injury": 1, "Aircraft": 1, "Make": 1,
+                                                 "Total": 1, "Weather": 1, "Broad": 1, "FAR": 1})
+            output = []
+            for data in all_data:
+                record = {}
+                record['EventId'] = data.get('Event', {}).get('Id', 0)
+                record['EventDate'] = data.get('Event', {}).get('Date', '1970-01-01')
+                record['Location'] = data.get('Location', "NA")
+                record['InjurySeverity'] = data.get('Injury', {}).get('Severity', 'NA')
+                record['AircraftDamage'] = data.get('Aircraft', {}).get('damage', 'NA')
+                record['Make'] = data.get('Make', 'NA')
+                record['TotalFatalInjuries'] = data.get('Total', {}).get('Fatal', {}).get('Injuries', 0)
+                record['TotalSeriousInjuries'] = data.get('Total', {}).get('Serious', {}).get('Injuries', 0)
+                record['WeatherCondition'] = data.get('Weather', {}).get('Condition', 'NA')
+                record['Broadphaseofflight'] = data.get('Broad', {}).get('phase', {}).get('of', {}).get('flight', 'NA')
+                record['Description'] = data.get('FAR', {}).get('Description', 'NA')
+                output.append(record)
+
+            return output, 200
+        except Exception as e:
+            print(e)
+            print("Error while fetching records, Try again")
+            return {"Error": "Couldn't fetch records, please try later"}, 400
+
 
 
 if __name__ == "__main__":
