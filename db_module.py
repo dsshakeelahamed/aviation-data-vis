@@ -68,7 +68,7 @@ class MongoDBModule:
             for record in response:
                 accident_count.append(record.get("TotalAccidents", 0))
                 accident_year.append(str(record.get("year", "NA")))
-            output_json = {"line_chart_data": {"data": accident_count, "label": "TotalAccidents"},
+            output_json = {"line_chart_data": [{"data": accident_count, "label": "TotalAccidents"}],
                            "line_chart_labels": accident_year}
             return output_json, 200
         except Exception as e:
@@ -81,6 +81,7 @@ class MongoDBModule:
             response = self.collection.aggregate(query.bar_graph)
             output = []
             for record in response:
+                record['data'] = [record.get('data')]
                 output.append(record)
             output_json = {"bar_chart_data": output}
             return output_json, 200
