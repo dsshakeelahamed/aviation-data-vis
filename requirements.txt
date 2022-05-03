@@ -1,4 +1,5 @@
-pymongo
+pymongo[srv]
 flask
 flask-restful
 flask-cors
+pandas
