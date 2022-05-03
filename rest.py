@@ -75,6 +75,19 @@ class AviationAllData(Resource):
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
+    def post(self):
+        data = request.get_json()
+        response_data, status_code = db_module.create_record(data)
+        response = Response(json.dumps(response_data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response_data, status_code
+
+    def delete(self):
+        data = request.get_json()
+        response_data, status_code = db_module.delete_record(data)
+        response = Response(json.dumps(response_data), status_code, content_type="Application/Json")
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response_data, status_code
 
 api.add_resource(AviationAccidents, "/aviation/accidents")
 api.add_resource(AviationDestroyed, "/aviation/destroyed")
