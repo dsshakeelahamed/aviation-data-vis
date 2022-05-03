@@ -63,10 +63,14 @@ class MongoDBModule:
     def get_line_graph_data(self):
         try:
             response = self.collection.aggregate(query.line_graph)
-            output = []
+            accident_count = []
+            accident_year = []
             for record in response:
-                output.append(record)
-            return output, 200
+                accident_count.append(record.get("TotalAccidents", 0))
+                accident_year.append(str(record.get("year", "NA")))
+            output_json = {"line_chart_data": {"data": accident_count, "label": "TotalAccidents"},
+                           "line_chart_labels": accident_year}
+            return output_json, 200
         except Exception as e:
             # print(e)
             print("Error while fetching records, Try again")
@@ -78,7 +82,8 @@ class MongoDBModule:
             output = []
             for record in response:
                 output.append(record)
-            return output, 200
+            output_json = {"bar_chart_data": output}
+            return output_json, 200
         except Exception as e:
             print(e)
             print("Error while fetching records, Try again")
@@ -133,7 +138,28 @@ class MongoDBModule:
             print("Error while fetching records, Try again")
             return {"Error": "Couldn't fetch records, please try later"}, 400
 
+    def create_record(self, data):
+        try:
+            # break the input data and build the json to be inserted
+            self.collection.insert_one(data)
+            return {"message": "Successfully inserted record"}, 200
+        except Exception as e:
+            print(e)
+            print("Error while inserting record, Try again")
+            return {"Error": "Error while inserting record, please try later"}, 400
 
+    def delete_record(self, data):
+        try:
+            id = data.get("id", "")
+            if id:
+                self.collection.delete_one({"Event.Id": str(id)})
+                return {"message": "Successfully deleted record"}, 200
+            else:
+                return {"message": "Id not provided"}, 200
+        except Exception as e:
+            print(e)
+            print("Error while deleting record, Try again")
+            return {"Error": "Error while deleting record, please try later"}, 400
 
 if __name__ == "__main__":
     obj = MongoDBModule()

@@ -59,10 +59,10 @@ bar_graph = [
                 "$group":
                 {
                     "_id": {"PhaseOfFlight" : "$Broad.phase.of.flight" },
-                    "TotalAccidents": {"$sum": 1}
+                    "data": {"$sum": 1}
                  }
             },
-            {"$project": {"PhaseOfFlight": "$_id.PhaseOfFlight", "TotalAccidents": 1, "_id": 0}},
+            {"$project": {"label": "$_id.PhaseOfFlight", "data": 1, "_id": 0}},
             ]
 
 fatal_accidents = [
@@ -79,3 +79,4 @@ non_fatal_accidents = [
           }},
     {"$count": "non_fatal"}
 ]
+
