@@ -142,21 +142,36 @@ class MongoDBModule:
     def create_record(self, data):
         try:
             # break the input data and build the json to be inserted
-            self.collection.insert_one(data)
+            data_json = {
+                "Event": {
+                    "Id": data.get("EventId", "NA"),
+                    "Date": data.get("EventDate", "NA")
+                },
+                "Location": data.get("Location", "NA"),
+                "FAR": {
+                    "Description": data.get("Description", "NA")
+                },
+                "Injury": {
+                    "Severity": data.get("InjurySeverity", "NA")
+                },
+                "Aircraft": {"Damage": data.get("AircraftDamage", "NA")},
+                "Total": {"Fatal": {"Injuries": data.get("TotalFatalInjuries", "NA")}}
+            }
+            print(data_json)
+            self.collection.insert_one(data_json)
             return {"message": "Successfully inserted record"}, 200
         except Exception as e:
             print(e)
             print("Error while inserting record, Try again")
             return {"Error": "Error while inserting record, please try later"}, 400
 
-    def delete_record(self, data):
+    def delete_record(self, id):
         try:
-            id = data.get("id", "")
             if id:
                 self.collection.delete_one({"Event.Id": str(id)})
                 return {"message": "Successfully deleted record"}, 200
             else:
-                return {"message": "Id not provided"}, 200
+                return {"message": "Invalid Id"}, 200
         except Exception as e:
             print(e)
             print("Error while deleting record, Try again")

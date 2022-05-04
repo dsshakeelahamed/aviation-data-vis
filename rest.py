@@ -82,12 +82,21 @@ class AviationAllData(Resource):
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response_data, status_code
 
-    def delete(self):
-        data = request.get_json()
-        response_data, status_code = db_module.delete_record(data)
+    # def delete(self):
+    #     print(request.args)
+    #     response_data, status_code = db_module.delete_record(request.args.get('id', None))
+    #     response = Response(json.dumps(response_data), status_code, content_type="Application/Json")
+    #     response.headers.add("Access-Control-Allow-Origin", "*")
+    #     return response_data, status_code
+
+
+class AviationDelete(Resource):
+    def delete(self, id):
+        response_data, status_code = db_module.delete_record(id)
         response = Response(json.dumps(response_data), status_code, content_type="Application/Json")
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response_data, status_code
+
 
 api.add_resource(AviationAccidents, "/aviation/accidents")
 api.add_resource(AviationDestroyed, "/aviation/destroyed")
@@ -97,6 +106,7 @@ api.add_resource(AviationLineGraph, "/aviation/line")
 api.add_resource(AviationBarGraph, "/aviation/bar")
 api.add_resource(AviationPieChart, "/aviation/pie")
 api.add_resource(AviationAllData, "/aviation/data")
+api.add_resource(AviationDelete, "/aviation/data/<id>")
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=8081)
